@@ -19,6 +19,7 @@ class ToggleFilterCard extends HTMLElement {
         context.save()
         context.fillStyle = 'black'
         context.globalAlpha = 0.55
+        context.fillRect(0,2*h/3,w,h/3)
         context.restore()
         this.circularProgress.draw(context,this.color)
         this.img.src = canvas.toDataURL()
@@ -33,6 +34,8 @@ class ToggleFilterCard extends HTMLElement {
             this.img.onmousedown = (event) => {
                 const x = event.offsetX,y = event.offsetY
                 if(this.circularProgress.handleTap(x,y) == true) {
+                    this.circularProgress.setDir()
+                    this.colorFilter.setDir()
                     const interval = setInterval(()=>{
                         this.colorFilter.update()
                         this.circularProgress.update()
@@ -63,14 +66,20 @@ class ColorFilter {
     setMaxH(maxH) {
         this.maxH = maxH
     }
-    setDir(dir) {
-        this.dir = dir
+    setDir() {
+        if(this.hx == 0) {
+            this.dir = 1
+        }
+        else {
+            this.dir = -1
+        }
     }
     stopped() {
         return this.dir == 0
     }
     update() {
         this.hx += ((this.maxH)/5) * this.dir
+        console.log(this.hx)
         if(this.hx > this.maxH) {
             this.dir = 0
             this.hx = this.maxH
@@ -93,17 +102,27 @@ class CircularProgress {
         context.fillStyle = color
         context.save()
         context.translate(this.x,this.y)
+        context.strokeStyle = 'white'
+        context.lineWidth = this.r/10
+        context.beginPath()
+        context.arc(0,0,this.r,0,2*Math.PI)
+        context.stroke()
         context.beginPath()
         context.moveTo(0,0)
         for(var i=0;i<=this.ea;i++) {
-            const x = r*(Math.cos(i*Math.PI/180)) , y = r*(Math.sin(i*Math.PI/180))
+            const x = this.r*(Math.cos(i*Math.PI/180)) , y = this.r*(Math.sin(i*Math.PI/180))
             context.lineTo(x,y)
         }
         context.fill()
         context.restore()
     }
-    setDir(dir) {
-        this.dir = dir
+    setDir() {
+        if(this.ea == 0) {
+            this.dir = 1
+        }
+        else {
+            this.dir = -1
+        }
     }
     stopped() {
         return this.dir == 0
