@@ -21,6 +21,7 @@ class ToggleFilterCard extends HTMLElement {
         context.globalAlpha = 0.55
         context.restore()
         this.circularProgress.draw(context,this.color)
+        this.img.src = canvas.toDataURL()
     }
     connectedCallback() {
         const image = new Image()
@@ -122,3 +123,4 @@ class CircularProgress {
         return x>=this.x - this.r && x<=this.x+this.r && y>=this.y - this.r && y<=this.y+this.r
     }
 }
+customElements.define('toggle-filter-card',ToggleFilterCard)
