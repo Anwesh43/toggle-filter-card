@@ -15,7 +15,7 @@ class ToggleFilterCard extends HTMLElement {
         canvas.height = h
         const context = canvas.getContext('2d')
         context.drawImage(image,0,0)
-        this.colorFilter.draw(context,this.color)
+        this.colorFilter.draw(context,this.color,w)
         context.save()
         context.fillStyle = 'black'
         context.globalAlpha = 0.55
