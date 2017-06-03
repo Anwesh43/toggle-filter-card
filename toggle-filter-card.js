@@ -29,6 +29,21 @@ class ToggleFilterCard extends HTMLElement {
             this.circularProgress = new CircularProgress(image.width,image.height)
             this.colorFilter.setMaxH(2*image.height/3)
             this.render(image)
+            this.img.onmousedown = (event) => {
+                const x = event.offsetX,y = event.offsetY
+                if(this.circularProgress.handleTap(x,y) == true) {
+                    const interval = setInterval(()=>{
+                        this.colorFilter.update()
+                        this.circularProgress.update()
+                        if(this.colorFilter.stopped() == true  && this.circularProgress.stopped() == true) {
+                            this.render(image)
+                            clearInterval(interval)
+                        }
+                        this.render(image)
+                    },100)
+                }
+            }
+
         }
     }
 }
@@ -102,5 +117,8 @@ class CircularProgress {
             this.dir = 0
             this.ea = 0
         }
+    }
+    handleTap(x,y) {
+        return x>=this.x - this.r && x<=this.x+this.r && y>=this.y - this.r && y<=this.y+this.r
     }
 }
